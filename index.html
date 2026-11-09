@@ -6,27 +6,34 @@
 <title>Design Project: Player Damage Calculation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap">
 <style>
-:root{--bg:#000;--fg:#fff;--mut:#c8d0ff;--line:#fff;--bar:#58d854;--miss:#8c8c9c;--crit:#f8a038;--val:#7cf47c;color-scheme:dark;
+:root{--bg:#000;--fg:#fff;--mut:#c8d0ff;--line:#fff;--bar:#58d854;--miss:#8c8c9c;--crit:#f08020;--val:#7cf47c;color-scheme:dark;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
-body{background:#000;color:#fff;font:16px/1.4 'DotGothic16',ui-monospace,monospace;padding:16px;max-width:640px;margin:0 auto;text-shadow:1px 1px 0 #000}
+body{background:#000;color:#fff;font:16px/1.4 'DotGothic16',ui-monospace,monospace;padding:20px 16px;max-width:640px;margin:0 auto;text-shadow:1px 1px 0 #000}
 h1{font:12px/1.7 'Press Start 2P',ui-monospace,monospace;margin:0 0 16px}
-.card{background:linear-gradient(180deg,#2840e0,#0810a0);border:3px solid #fff;border-radius:8px;box-shadow:0 0 0 3px #000,inset 0 0 0 2px #0a1478;padding:14px;margin-bottom:16px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0;font-size:15px}
-.step{display:flex;align-items:center;gap:6px}
-.step button{width:40px;height:40px;border:2px solid #fff;background:rgba(0,0,0,.25);color:#fff;border-radius:6px;font-size:14px;font-family:inherit}
-.step button:active{background:#fff;color:#0810a0}
+.step{display:flex;align-items:center;gap:8px}
 .step button:disabled{opacity:.3}
 .step output{min-width:4.5em;text-align:center;font-size:18px;color:var(--val)}
-.seg{display:flex;gap:8px;margin-bottom:8px}
-.seg button{flex:1;padding:10px;border:2px solid #fff;background:rgba(0,0,0,.25);color:#fff;border-radius:6px;font-size:16px;font-family:inherit}
-.seg button.on{background:#fff;color:#0810a0;text-shadow:none}
+.seg{display:flex;gap:12px;margin:0 0 12px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 8px;font-size:15px}
 .stats b{display:block;font-size:22px;font-weight:400;color:var(--val)}
 .legend{font-size:13px;display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px}
 .legend i{display:inline-block;width:10px;height:10px;margin-right:4px;border:1px solid #fff}
 .scroll{overflow-x:auto}
 svg text{font-family:'DotGothic16',ui-monospace,monospace}
+.card{position:relative;isolation:isolate;padding:18px;margin:12px 4px 24px}
+.card::before,.card::after,.step button::before,.step button::after,.seg button::before,.seg button::after{content:"";position:absolute;z-index:-1}
+.card::before{inset:0;background:#fff;clip-path:polygon(calc(100% - 12px) 0px,calc(100% - 12px) 4px,calc(100% - 8px) 4px,calc(100% - 8px) 8px,calc(100% - 4px) 8px,calc(100% - 4px) 12px,100% 12px,100% calc(100% - 12px),calc(100% - 4px) calc(100% - 12px),calc(100% - 4px) calc(100% - 8px),calc(100% - 8px) calc(100% - 8px),calc(100% - 8px) calc(100% - 4px),calc(100% - 12px) calc(100% - 4px),calc(100% - 12px) 100%,12px 100%,12px calc(100% - 4px),8px calc(100% - 4px),8px calc(100% - 8px),4px calc(100% - 8px),4px calc(100% - 12px),0px calc(100% - 12px),0px 12px,4px 12px,4px 8px,8px 8px,8px 4px,12px 4px,12px 0px)}
+.card::after{inset:4px;background:linear-gradient(180deg,#2840e0 0.000% 2.500%,#273fde 2.500% 5.000%,#263edd 5.000% 7.500%,#263cdb 7.500% 10.000%,#253bd9 10.000% 12.500%,#243ad8 12.500% 15.000%,#2339d6 15.000% 17.500%,#2237d5 17.500% 20.000%,#2136d3 20.000% 22.500%,#2135d1 22.500% 25.000%,#2034d0 25.000% 27.500%,#1f32ce 27.500% 30.000%,#1e31cc 30.000% 32.500%,#1d30cb 32.500% 35.000%,#1d2fc9 35.000% 37.500%,#1c2ec7 37.500% 40.000%,#1b2cc6 40.000% 42.500%,#1a2bc4 42.500% 45.000%,#192ac2 45.000% 47.500%,#1829c1 47.500% 50.000%,#1827bf 50.000% 52.500%,#1726be 52.500% 55.000%,#1625bc 55.000% 57.500%,#1524ba 57.500% 60.000%,#1422b9 60.000% 62.500%,#1321b7 62.500% 65.000%,#1320b5 65.000% 67.500%,#121fb4 67.500% 70.000%,#111eb2 70.000% 72.500%,#101cb0 72.500% 75.000%,#0f1baf 75.000% 77.500%,#0f1aad 77.500% 80.000%,#0e19ab 80.000% 82.500%,#0d17aa 82.500% 85.000%,#0c16a8 85.000% 87.500%,#0b15a7 87.500% 90.000%,#0a14a5 90.000% 92.500%,#0a12a3 92.500% 95.000%,#0911a2 95.000% 97.500%,#0810a0 97.500% 100.000%);clip-path:polygon(calc(100% - 8px) 0px,calc(100% - 8px) 4px,calc(100% - 4px) 4px,calc(100% - 4px) 8px,100% 8px,100% calc(100% - 8px),calc(100% - 4px) calc(100% - 8px),calc(100% - 4px) calc(100% - 4px),calc(100% - 8px) calc(100% - 4px),calc(100% - 8px) 100%,8px 100%,8px calc(100% - 4px),4px calc(100% - 4px),4px calc(100% - 8px),0px calc(100% - 8px),0px 8px,4px 8px,4px 4px,8px 4px,8px 0px)}
+.step button,.seg button{position:relative;isolation:isolate;border:0;background:none;color:#fff;font-family:inherit;padding:0}
+.step button{width:42px;height:42px;display:flex;align-items:center;justify-content:center}
+.seg button{flex:1;padding:11px 0;font-size:16px}
+.step button::before,.seg button::before{inset:0;background:#fff;clip-path:polygon(calc(100% - 6px) 0px,calc(100% - 6px) 3px,calc(100% - 3px) 3px,calc(100% - 3px) 6px,100% 6px,100% calc(100% - 6px),calc(100% - 3px) calc(100% - 6px),calc(100% - 3px) calc(100% - 3px),calc(100% - 6px) calc(100% - 3px),calc(100% - 6px) 100%,6px 100%,6px calc(100% - 3px),3px calc(100% - 3px),3px calc(100% - 6px),0px calc(100% - 6px),0px 6px,3px 6px,3px 3px,6px 3px,6px 0px)}
+.step button::after,.seg button::after{inset:3px;background:#0a1478;clip-path:polygon(calc(100% - 3px) 0px,calc(100% - 3px) 3px,100% 3px,100% calc(100% - 3px),calc(100% - 3px) calc(100% - 3px),calc(100% - 3px) 100%,3px 100%,3px calc(100% - 3px),0px calc(100% - 3px),0px 3px,3px 3px,3px 0px)}
+.step button:active,.seg button.on{color:#0810a0;text-shadow:none}
+.step button:active::after,.seg button.on::after{background:#fff}
+.step svg{pointer-events:none}
 </style>
 </head>
 <body>
@@ -38,7 +45,7 @@ svg text{font-family:'DotGothic16',ui-monospace,monospace}
 <div class="card stats" id="stats"></div>
 <div class="card">
   <div class="scroll"><svg id="chart" width="100%" role="img" aria-label="Damage distribution"></svg></div>
-  <div class="legend"><span><i style="background:var(--miss)"></i>Miss</span><span><i style="background:var(--bar)"></i>Hit</span><span><i style="background:#c878f8"></i>Critical Hit</span><span><i style="background:var(--crit)"></i>Direct Hit</span><span><i style="background:#ff4838"></i>Direct Critical Hit</span></div>
+  <div class="legend"><span><i style="background:var(--miss)"></i>Miss</span><span><i style="background:var(--bar)"></i>Hit</span><span><i style="background:#ffe83a"></i>Critical Hit</span><span><i style="background:var(--crit)"></i>Direct Hit</span><span><i style="background:#ff4838"></i>Direct Critical Hit</span></div>
 </div>
 <script>
 const ATTR=[[0,4],[0,6],[0,8],[0,10],[0,12],[2,10],[4,8],[6,6],[8,4],[12,0]];
@@ -53,16 +60,19 @@ const params=[
 ["A","Target’s Armor Coverage",0,20,0],["R","Target’s Armor Rating",0,20,0],
 ["D","Weapon’s Precision",0,5,0,i=>DS[i]?'d'+DS[i]:'0'],
 ["K","Chaos",0,6,0,i=>CH[i]?'d'+CH[i]:'0']];
+const ORDER='XYCZDERAK';params.sort((p,q)=>ORDER.indexOf(p[0])-ORDER.indexOf(q[0]));
 const v={};let trained=false;
 const ctl=document.getElementById('ctl');
+const AL='<svg viewBox="0 0 4 7" width="12" height="21" shape-rendering="crispEdges" fill="currentColor"><path d="M3 0h1v1h-1zM2 1h2v1h-2zM1 2h3v1h-3zM0 3h4v1h-4zM1 4h3v1h-3zM2 5h2v1h-2zM3 6h1v1h-1z"/></svg>',AR='<svg viewBox="0 0 4 7" width="12" height="21" shape-rendering="crispEdges" fill="currentColor"><path d="M0 0h1v1h-1zM0 1h2v1h-2zM0 2h3v1h-3zM0 3h4v1h-4zM0 4h3v1h-3zM0 5h2v1h-2zM0 6h1v1h-1z"/></svg>';
+const U=[];
 params.forEach(([k,l,mn,mx,df,fmt])=>{v[k]=df;fmt=fmt||(i=>String(i));
  const r=document.createElement('div');r.className='row';
- r.innerHTML=`<span>${l}</span><div class="step"><button aria-label="Decrease ${l}">◀</button><output></output><button aria-label="Increase ${l}">▶</button></div>`;
+ r.innerHTML=`<span>${l}</span><div class="step"><button aria-label="Decrease ${l}">${AL}</button><output></output><button aria-label="Increase ${l}">${AR}</button></div>`;
  const [dn,up]=r.querySelectorAll('button'),out=r.querySelector('output');
- const upd=()=>{out.textContent=fmt(v[k]);dn.disabled=v[k]<=mn;up.disabled=v[k]>=mx};
- dn.onclick=()=>{if(v[k]>mn){v[k]--;upd();draw()}};
- up.onclick=()=>{if(v[k]<mx){v[k]++;upd();draw()}};
- upd();ctl.appendChild(r)});
+ const upd=()=>{const lock=k==='A'&&v.R===0;out.textContent=fmt(v[k]);r.style.opacity=lock?.45:1;dn.disabled=lock||v[k]<=mn;up.disabled=lock||v[k]>=mx};
+ const go=d=>{const n=v[k]+d;if(n<mn||n>mx)return;v[k]=n;if(k==='R'&&n===0)v.A=0;U.forEach(f=>f());draw()};
+ dn.onclick=()=>go(-1);up.onclick=()=>go(1);
+ U.push(upd);upd();ctl.appendChild(r)});
 const tr=document.getElementById('tr'),un=document.getElementById('un');
 tr.onclick=()=>{trained=true;tr.classList.add('on');un.classList.remove('on');draw()};
 un.onclick=()=>{trained=false;un.classList.add('on');tr.classList.remove('on');draw()};
@@ -77,7 +87,7 @@ function calc(){
  const add=(dmg,t,p)=>{P[t]+=p;(dist[dmg]=dist[dmg]||[0,0,0,0,0])[t]+=p};
  for(const fa of xs)for(const fb of ys)for(const cp of cf){
   const x=AX[0]+fa,y=AY[0]+fb,s=x+y+C+cp,base=Z+(trained?Math.max(x,y):Math.min(x,y)),dbl=fa===fb;
-  const pM=cnt(s-E)/N,pH=(1-pM)*cnt(s-A)/N,pD=(1-pM)*(N-cnt(s-A))/N;
+  const pM=cnt(s-E)/N,pH=R>0?(1-pM)*cnt(s-A)/N:0,pD=R>0?(1-pM)*(N-cnt(s-A))/N:1-pM;
   if(pM>0)add(0,0,w*pM);
   if(pH>0){if(dbl)add(Math.max(0,mx-R),3,w*pH);else add(Math.max(0,base-R),1,w*pH)}
   if(pD>0){if(dbl)add(mx+ds,4,w*pD);else{const k=Math.max(ds,1);for(let d=1;d<=k;d++)add(base+(ds?d:0),2,w*pD/k)}}
@@ -94,7 +104,7 @@ function draw(){
  `<div>Hit<b>${pct(P[1])}</b></div><div>Direct Hit<b>${pct(P[2])}</b></div><div>Critical Hit<b>${pct(P[3])}</b></div><div>Direct Critical Hit<b>${pct(P[4])}</b></div><div>Hit Average Damage<b>${avg([1,3])}</b></div><div>Direct Hit Average Damage<b>${avg([2,4])}</b></div><div>Miss<b>${pct(P[0])}</b></div><div>Average Damage<b>${mean.toFixed(2)}</b></div>`;
  const n=max+1,bw=Math.max(34,Math.min(44,600/n)),W=n*bw+10,H=200;
  let top=0;keys.forEach(k=>top=Math.max(top,dist[k].reduce((a,b)=>a+b)));
- const cols=['var(--miss)','var(--bar)','var(--crit)','#c878f8','#ff4838'];
+ const cols=['var(--miss)','var(--bar)','var(--crit)','#ffe83a','#ff4838'];
  let s='';
  for(let k=0;k<=max;k++){
   const d=dist[k]||[0,0,0,0,0];let y=H-20;
